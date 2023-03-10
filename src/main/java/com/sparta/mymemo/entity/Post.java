@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,6 +15,7 @@ public class Post extends TimeStamped{
 
     @Id // pk설정
     @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "post_id")
     private Long id;
 
     @Column(nullable = false)
@@ -24,16 +27,20 @@ public class Post extends TimeStamped{
     @Column(nullable = false)
     private String username;
 
-//    @Column(nullable = false)
-//    private String password;
+    @ManyToOne // N쪽이 주인이된다 - 외래키를 갖는다.
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
 
+    @OneToMany(mappedBy = "post")
+    private List<Comment> commentList = new ArrayList<>();
 //    @ManyToMany
-//    private List<Post> postList = new ArrayList<>();
+//    private List<Comment> postList = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, User user) {
         this.content = requestDto.getContent();
         this.title = requestDto.getTitle();
         this.username = user.getUsername();
+        this.user = user;
     }
 
     public void updateMemo(PostRequestDto requestDto) {

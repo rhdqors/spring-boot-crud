@@ -1,7 +1,9 @@
 package com.sparta.mymemo.service;
 
+import com.sparta.mymemo.dto.CommentResponseDto;
 import com.sparta.mymemo.dto.PostRequestDto;
 import com.sparta.mymemo.dto.PostResponseDto;
+import com.sparta.mymemo.entity.Comment;
 import com.sparta.mymemo.entity.Post;
 import com.sparta.mymemo.entity.User;
 import com.sparta.mymemo.jwt.JwtUtil;
@@ -62,17 +64,22 @@ public class PostService {
     // 전체 글 조회
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts() {
-        List<Post> postlist = postRepository.findAllByOrderByCreatedAtDesc();
+        List<Post> postlist = postRepository.findAllByOrderByCreatedAtDesc(); // 전체 게시글 리스트에 넣기
 
-        // 형변환
+        // 최종 리턴값 담을 리스트
         List<PostResponseDto> responselist = new ArrayList<>();
 
-        for (Post post : postlist) {
-            responselist.add(new PostResponseDto(post));
+        for (Post post : postlist) { // 전체 게시물 리스트에서 각각의 게시물을 찾는다
+            List<Comment> comments = post.getCommentList(); // 각각의 게시물에 댓글을 붙여 새로운 리스트에 저장
+            List<CommentResponseDto> comResponseList = new ArrayList<>();
+            for (Comment comment : comments) {
+                comResponseList.add(new CommentResponseDto(comment));
+            }
+
+            responselist.add(new PostResponseDto(post,comResponseList));
+            // 각 게시물에 댓글을 새로 넣어줘야 함
         }
-
         return responselist;
-
     }
 
     // 선택 글 조회 - user 확인하는 토큰을 가져올 필요 없음
