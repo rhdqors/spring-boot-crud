@@ -1,8 +1,10 @@
 package com.sparta.mymemo.entity;
 
+import com.sparta.mymemo.dto.CommentResponseDto;
 import com.sparta.mymemo.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class Post extends TimeStamped{
         this.username = user.getUsername();
         this.user = user;
     }
+
 
     public void updateMemo(PostRequestDto requestDto) {
         this.content = requestDto.getContent();
