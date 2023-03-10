@@ -3,6 +3,7 @@ package com.sparta.mymemo.controller;
 import com.sparta.mymemo.dto.PostRequestDto;
 import com.sparta.mymemo.dto.PostResponseDto;
 import com.sparta.mymemo.dto.ResponseCodeDto;
+import com.sparta.mymemo.entity.Comment;
 import com.sparta.mymemo.entity.Post;
 import com.sparta.mymemo.service.PostService;
 import lombok.RequiredArgsConstructor;
