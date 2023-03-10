@@ -1,7 +1,6 @@
 package com.sparta.mymemo.dto;
 
 import com.sparta.mymemo.entity.Comment;
-import com.sparta.mymemo.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
 

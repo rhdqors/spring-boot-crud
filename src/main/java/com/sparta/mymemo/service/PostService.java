@@ -59,13 +59,13 @@ public class PostService {
         Post post = postRepository.saveAndFlush(new Post(requestDto, user));
 
         return new PostResponseDto(post);
-
     }
 
-    // 전체 글 조회
+    // 전체 글 조회 - user 확인하는 토큰을 가져올 필요 없음
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts() {
         List<Post> postlist = postRepository.findAllByOrderByCreatedAtDesc(); // 전체 게시글 리스트에 넣기
+        //controller, service타입을 response로 바꾸고 바로 리턴해도 나오나 ?
 
         // 최종 리턴값 담을 리스트
         List<PostResponseDto> responselist = new ArrayList<>();
@@ -95,7 +95,6 @@ public class PostService {
     public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, HttpServletRequest request) {
         User user = tokenMatchUser(request);
         Post post = postMatchUser(postId, user);
-//        Post post = postRepository.findByIdAndUsername(postId, user.getUsername()).orElseThrow(() -> new IllegalArgumentException("유저와 게시글이 일치하지 않습니다.")); // 로그인 유저가 작성한 글인지 확인
 
         post.updateMemo(requestDto);
         return new PostResponseDto(post);
@@ -106,10 +105,10 @@ public class PostService {
     public void deletePost(Long postId, HttpServletRequest request) {
         User user = tokenMatchUser(request);
         Post post = postMatchUser(postId, user);
-//        Post post = postRepository.findByIdAndUsername(postId, user.getUsername()).orElseThrow(() -> new IllegalArgumentException("유저와 게시글이 일치하지 않습니다.")); // 로그인 유저가 작성한 글인지 확인
-        postRepository.deleteById(post.getId());
 
+        postRepository.deleteById(post.getId());
     }
+
 
     private Post postMatchUser(Long postId, User user) {
         Post post = postRepository.findByIdAndUsername(postId, user.getUsername())

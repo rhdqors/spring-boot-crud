@@ -28,14 +28,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-
-
-//    @OneToMany(mappedBy = "user")
-//    private List<Comment> comments = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "user")
-//    private List<Post> posts = new ArrayList<>();
-
     public User(SignupRequestDto signupRequestDto, UserRoleEnum role) {
         this.role = role;
         this.username = signupRequestDto.getUsername();

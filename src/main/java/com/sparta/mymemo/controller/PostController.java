@@ -21,11 +21,6 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/")
-    public ModelAndView home() {
-        return new ModelAndView("index");
-    }
-
     // 글 생성
     @PostMapping("/api/post")
     public PostResponseDto createPost(@RequestBody PostRequestDto requestDto, HttpServletRequest request) {
