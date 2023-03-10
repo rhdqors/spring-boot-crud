@@ -7,6 +7,7 @@ import com.sparta.mymemo.entity.Comment;
 import com.sparta.mymemo.entity.Post;
 import com.sparta.mymemo.entity.User;
 import com.sparta.mymemo.jwt.JwtUtil;
+import com.sparta.mymemo.repository.CommentRepository;
 import com.sparta.mymemo.repository.PostRepository;
 import com.sparta.mymemo.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -26,6 +27,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     private User tokenMatchUser(HttpServletRequest request) {
         // 토큰 가져오기
@@ -86,8 +88,17 @@ public class PostService {
     // 선택 글 조회 - user 확인하는 토큰을 가져올 필요 없음
     @Transactional
     public PostResponseDto getPost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다.")); // 게시글 유무 확인
-        return new PostResponseDto(post); // 게시글 존재 > 형식 맞춰서 return
+
+        // 게시글, 아이디일치 확인
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        List<CommentResponseDto> commentList = new ArrayList<>();
+        for (Comment comment : post.getCommentList()) {
+            commentList.add(new CommentResponseDto(comment));
+        }
+        return new PostResponseDto(post, commentList);
+
     }
 
     // 글 수정
