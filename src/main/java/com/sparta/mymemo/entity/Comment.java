@@ -3,6 +3,7 @@ package com.sparta.mymemo.entity;
 import com.sparta.mymemo.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,5 +34,9 @@ public class Comment extends TimeStamped{
         this.content = commentRequestDto.getContent();
         this.user = user;
         this.post = post;
+    }
+
+    public void updateComment(CommentRequestDto commentRequestDto) {
+        this.content = commentRequestDto.getContent();
     }
 }

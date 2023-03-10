@@ -11,6 +11,7 @@ import com.sparta.mymemo.repository.PostRepository;
 import com.sparta.mymemo.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,10 +71,10 @@ public class PostService {
         List<PostResponseDto> responselist = new ArrayList<>();
 
         for (Post post : postlist) { // 전체 게시물 리스트에서 각각의 게시물을 찾는다
-            List<Comment> comments = post.getCommentList(); // 각각의 게시물에 댓글을 붙여 새로운 리스트에 저장
-            List<CommentResponseDto> comResponseList = new ArrayList<>();
-            for (Comment comment : comments) {
-                comResponseList.add(new CommentResponseDto(comment));
+            List<Comment> comments = post.getCommentList(); // 각 게시물의 댓글을 전체 저장하는 리스트
+            List<CommentResponseDto> comResponseList = new ArrayList<>(); // 클라이언트 내보낼 형식의 리스트
+            for (Comment comment : comments) { // 전체 댓글 리스트에서 각각의 댓글을 찾는다
+                comResponseList.add(new CommentResponseDto(comment)); // 댓글을 클라이언트로 내보낼 형식으로 리스트 저장
             }
 
             responselist.add(new PostResponseDto(post,comResponseList));
