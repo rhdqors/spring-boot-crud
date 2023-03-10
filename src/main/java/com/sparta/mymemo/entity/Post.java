@@ -35,8 +35,6 @@ public class Post extends TimeStamped{
 
     @OneToMany(mappedBy = "post")
     private List<Comment> commentList = new ArrayList<>();
-//    @ManyToMany
-//    private List<Comment> postList = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, User user) {
         this.content = requestDto.getContent();

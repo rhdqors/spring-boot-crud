@@ -53,6 +53,7 @@ public class CommentService {
         return user;
     }
 
+    // 댓글 생성
     @Transactional
     public CommentResponseDto addComment(CommentRequestDto commentRequestDto, HttpServletRequest request) {
 
@@ -66,29 +67,25 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
+    // 댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long comId, CommentRequestDto commentRequestDto, HttpServletRequest request) {
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto, HttpServletRequest request) {
         User user = tokenMatchUser(request);
 
-//        Post post = postMatchUser(comId, user);
-
-        Comment comment = commentRepository.findByIdAndUser(comId, user)
+        Comment comment = commentRepository.findByIdAndUser(commentId, user)
                 .orElseThrow(() -> new IllegalArgumentException("유저와 댓글이 일치하지 않습니다.")); // 로그인 유저가 작성한 글인지 확인
-
-
-//        Comment comment = commentRepository.findById(commentRequestDto.getId()).orElseThrow(
-//                () -> new IllegalArgumentException("게시글 없음")
-//        ); // 수정할 게시글 찾아옴
-//        Comment comment = commentRepository.findById(postId)
-//                .orElseThrow( () -> new IllegalArgumentException("댓글 없음."));
 
         comment.updateComment(commentRequestDto);
         return new CommentResponseDto(comment);
     }
 
-    private Post postMatchUser(Long postId, User user) {
-        Post post = postRepository.findByIdAndUsername(postId, user.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("유저와 게시글이 일치하지 않습니다.")); // 로그인 유저가 작성한 글인지 확인
-        return post;
+    // 댓글 삭제
+    public void deleteComment(Long commentId, HttpServletRequest request) {
+        User user = tokenMatchUser(request);
+
+        Comment comment = commentRepository.findByIdAndUser(commentId, user)
+                .orElseThrow(() -> new IllegalArgumentException("유저와 댓글이 일치하지 않습니다.")); // 로그인 유저가 작성한 글인지 확인
+
+        commentRepository.delete(comment);
     }
 }
